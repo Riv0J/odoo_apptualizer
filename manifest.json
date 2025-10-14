@@ -1,0 +1,33 @@
+{
+    "manifest_version": 3,
+    "name": "Actualizador de Apps Odoo",
+    "version": "1.0",
+    "description": "Automatiza la actualización de módulos en Odoo.",
+    "permissions": ["scripting", "tabs", "storage"],
+    "host_permissions": [
+        "*://*/*"
+    ],
+    "content_scripts": [
+        {
+        "matches": ["*://*/*"],
+        "js": ["content.js"],
+        "run_at": "document_idle"
+        }
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "icon.png"
+    },
+    "commands": {
+        "apptualizar": {
+            "suggested_key": {
+                    "default": "Ctrl+B",
+                    "mac": "Command+B"
+                },
+            "description": "Ejecutar Apptualizar"
+        }
+    },
+    "background": {
+        "service_worker": "background.js"
+    }
+}

@@ -1,0 +1,77 @@
+body {
+    background-color: #f5f6fa;
+    font-family: 'Inter', sans-serif;
+    padding: 15px;
+    width: 200px;
+    color: #2d3436;
+    position: relative;
+    margin: 0;
+    border-radius: 0.5rem;
+}
+body::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 65%;
+    bottom: 25%;
+    width: 60%;
+    height: 65%;
+    background-image: url("./busman.webp");
+    background-position: center;
+    background-size: cover;
+    overflow: visible;
+    opacity: 0.25;
+    /* z-index: -1 */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+h1 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #4b4b4b;
+    margin: 0;
+}
+
+.branding {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 400;
+    margin-top: 20px;
+}
+
+input[type="text"] {
+    padding: 8px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #7f8c8d;
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #636e72;
+}
+
+footer {
+    font-size: 0.8rem;
+    color: #aaa;
+    text-align: center;
+    margin-top: 20px;
+}
