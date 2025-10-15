@@ -10,12 +10,12 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
         case "apptualizar":
             console.log("📩 Mensaje recibido: Ejecutando content.js");
 
-            // if(!is_odoo()){
-            //     return message("No es un sitio de odoo", false);
-            // }
+            if(!is_odoo()){
+                return message("No es un sitio de odoo", "error");
+            }
             
             if(!config['module_name']){
-                return message("‼ Error obteniendo el nombre de módulo guardado", "error");
+                return message("Error obteniendo el nombre de módulo guardado", "error");
             }
 
             await app_menu();
@@ -33,7 +33,7 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
 });
 
 function is_odoo(){
-    return document.querySelector("[data-odoo]");
+    return document.querySelector("[data-odoo]") || document.querySelector('.o_navbar');
 }
 async function app_menu() {
     //if user is in form menu, click cancel changes
