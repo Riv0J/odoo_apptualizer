@@ -1,0 +1,66 @@
+body{
+    position: relative;
+}
+#apptualizer-container{
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    z-index: 9999;
+}
+#apptualizer-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: white;       /* fondo circular */
+  padding: 1rem;
+  border-radius: 50%;            /* círculo perfecto */
+  aspect-ratio: 1;               /* siempre cuadrado */
+  width: 3rem;                   /* tamaño fijo */
+  height: 3rem;                  /* asegura que sea cuadrado */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+#apptualizer-loading span {
+  display: inline-block;         /* necesario para animar */
+  font-family: system-ui, sans-serif;
+  font-size: 1.75rem;
+  color: #0c9e81;
+  animation: rotate 4s linear infinite;
+  translate: 0 -5%;
+}
+@keyframes rotate {
+    0%{
+        scale: 1;
+    }
+    50%{
+        scale: 1.5;
+    }
+    100%{
+        scale: 1;
+    }
+}
+.apptualizer-message {
+    color: #222;
+    padding: 10px 20px;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    font-family: sans-serif;
+    font-size: 14px;
+    pointer-events: auto;
+    z-index: 999999;
+}
+
+.apptualizer-message.success {
+    background: #0c9e81;
+    color: white;
+}
+.apptualizer-message.error {
+    background: #ff9e9e;
+}
+.apptualizer-message.normal{
+    background: #ffe386;
+}

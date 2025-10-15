@@ -1,33 +1,33 @@
 console.log("✅ content.js cargado");
-const config = null;
 chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
-
-    let config = await chrome.storage.local.get(null);
-    console.log(config);
+    const config = await chrome.storage.local.get(null);
+    // console.log(config);
     
     switch (request.action) {
         case "save_module_name":
-            message("Módulo guardado: "+config['module_name']);
+            message("Módulo guardado: "+config['module_name'], "success");
             break;
         case "apptualizar":
             console.log("📩 Mensaje recibido: Ejecutando content.js");
 
-            if(!is_odoo()){
-                return message("No es un sitio de odoo", false);
-            }
+            // if(!is_odoo()){
+            //     return message("No es un sitio de odoo", false);
+            // }
             
             if(!config['module_name']){
-                return message("‼ Error obteniendo el nombre de módulo guardado", false);
+                return message("‼ Error obteniendo el nombre de módulo guardado", "error");
             }
 
             await app_menu();
             await app_search(config['module_name']);
             await app_update();
-            // await app_update_animation();
+
+            const count = !config.update_count ? 1 : config.update_count+1;
+            console.log(count);
+            chrome.storage.local.set({update_count: count});
 
             sendResponse({ status: "ok" });
         default:
-            // message("Elemento no encontrado", false);
             break;
     }
 });
@@ -42,6 +42,7 @@ async function app_menu() {
     //if apps menu is visible, click it
     document.querySelector(".o_navbar_apps_menu button")?.click();
 
+    //click on apps
     message('Entrando a Apps...');
     await click('[data-menu-xmlid="base.menu_management"]')
 }
@@ -50,36 +51,23 @@ async function app_search(name) {
     await search('.o_searchview_input', name);
 }
 async function app_update() {
-    click('.o_dropdown_kanban button');
+    await click('.o_dropdown_kanban button');
 
-    if(await click('[name="button_immediate_upgrade"]')){
-        message(`Actualizando`, true);
+    const e = await waitForElement('[name="button_immediate_upgrade"]');
+    if(e){
+        app_update_animation();
+        e.click();
     }
 }
 async function click(selector) {
     try {
         const element = await waitForElement(selector);
-
-        interact(element);
-        sleep(3000);
         element.click();
-        interact(element, true);
-
         console.log(`🖱️ Click en ${selector}`);
         message(`🖱️ Click en ${selector}`);
     } catch (error) {
         console.error(error);
-        message(`❌ No se pudo hacer clic en "${selector}": ${error}`);
-    }
-}
-
-function interact(e, remove=false){
-    if(remove === true){
-        e.style.boxShadow = '';
-    } else {
-        Object.assign(e.style, {
-            boxShadow: '0 5px 10px 10px rgba(255, 0, 0, 0.95)',
-        });
+        message(`❌ No se pudo hacer clic en "${selector}": ${error}`, "error");
     }
 }
 
@@ -114,56 +102,38 @@ async function search(selector, text) {
     }
 }
 
-function message(msg = "⚠️ Error al hacer clic en el elemento.", status) {
-    // Asegura que el body tenga position: relative
-    document.body.style.position = 'relative';
-    
+function message(text, status="normal") {
     // Crea el contenedor si no existe
-    let container = document.getElementById('message-container');
+    let container = document.querySelector('#apptualizer-container');
     if (!container) {
         container = document.createElement('div');
-        container.id = 'message-container';
-        container.style.position = 'absolute';
-        container.style.inset = '0';
-        container.style.display = 'flex';
-        container.style.justifyContent = 'center';
-        container.style.alignItems = 'center';
-        container.style.pointerEvents = 'none';
-        container.style.zIndex = '9999';
+        container.id = 'apptualizer-container';
         document.body.appendChild(container);
     }
     
     // Crea el mensaje
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message';
-    messageDiv.textContent = msg;
-    
-    const color = status === true ? '#e0ffc9'
-    : status === false
-    ? '#ff9e9eff'
-    : '#ffe386ff';
-
-    // Estilos del mensaje
-    Object.assign(messageDiv.style, {
-        background: color,
-        color: '#222',
-        padding: '10px 20px',
-        borderRadius: '6px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-        fontFamily: 'sans-serif',
-        fontSize: '14px',
-        pointerEvents: 'auto',
-    });
+    const message = document.createElement('div');
+    message.className = 'apptualizer-message '+status;
+    message.textContent = text;
     
     // Limpia mensajes previos
     container.innerHTML = '';
-    container.appendChild(messageDiv);
-    
-    // Opcional: eliminar después de unos segundos
+    container.appendChild(message);
     setTimeout(() => {
-        container.remove();
+        message.remove();
     }, 3000);
 }
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+function app_update_animation(){
+    document.querySelector('#apptualizer-container').innerHTML = "";
+
+    const loading = document.createElement('div');
+    loading.id = 'apptualizer-loading';
+    loading.className = 'apptualizer-message'
+    const icons = "♥♠♣♦○";
+    loading.innerHTML = `<span>${icons[Math.floor(Math.random() * icons.length)]}</span>`;
+
+    document.querySelector('#apptualizer-container').appendChild(loading);
 }
+// function sleep(ms) {
+//     return new Promise(resolve => setTimeout(resolve, ms));
+// }
