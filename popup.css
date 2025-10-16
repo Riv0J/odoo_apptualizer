@@ -21,7 +21,7 @@ body::after{
     background-size: cover;
     overflow: visible;
     opacity: 0.25;
-    /* z-index: -1 */
+    pointer-events: none;
 }
 
 .container {

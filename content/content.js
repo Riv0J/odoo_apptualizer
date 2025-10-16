@@ -133,6 +133,10 @@ function app_update_animation(){
     loading.innerHTML = `<span>${icons[Math.floor(Math.random() * icons.length)]}</span>`;
 
     document.querySelector('#apptualizer-container').appendChild(loading);
+
+    setTimeout(()=>{
+        loading.remove();
+    }, 10000)
 }
 // function sleep(ms) {
 //     return new Promise(resolve => setTimeout(resolve, ms));
