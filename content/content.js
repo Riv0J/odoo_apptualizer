@@ -123,6 +123,7 @@ function message(text, status="normal") {
         message.remove();
     }, 3000);
 }
+
 function app_update_animation(){
     document.querySelector('#apptualizer-container').innerHTML = "";
 
@@ -138,6 +139,3 @@ function app_update_animation(){
         loading.remove();
     }, 10000)
 }
-// function sleep(ms) {
-//     return new Promise(resolve => setTimeout(resolve, ms));
-// }
